@@ -10,11 +10,8 @@ E4_func.c
 double acceleration(double v, double x, double ny, double omega){
 
 	double a;
-	double eta;
-
-	eta = (double) rand() / RAND_MAX;
-
-	a = -ny * v - omega*omega*x + eta;
+	
+	a = - omega*omega*x;
 
 	return a;
 
