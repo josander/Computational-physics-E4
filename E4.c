@@ -35,7 +35,7 @@ int main()
 	dt = 0.05; // Units: [s]
 	c0 = exp(-eta * dt);
 	timesteps = 100000;
-	x = 0.05; // Units: [m]
+	x = 0.01; // Units: [m]
 	v = 0.0;
 	a = 0.0;
 	double X[timesteps + 1];

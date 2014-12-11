@@ -46,7 +46,7 @@ figure(2);
 clf
 subplot(2,1,1)
 plot(linspace(0,length(trajData05)*0.05,length(trajData05)),trajData05,'g', linspace(0,length(trajData5)*0.05,length(trajData5)),trajData5,'b');
-axis([0 50 -0.075 0.075]);
+axis([0 50 -0.01 0.01]);
 xlabel('Time [s]','fontsize',12);
 ylabel('Trajectory [m]','fontsize',12,'Interpreter','latex');
 
@@ -56,21 +56,17 @@ print(gcf,'-depsc2','trajectory.eps')
 
 subplot(2,1,2)
 plot(linspace(0,length(trajData5)*0.05,length(trajData5)),trajData5,'b');
-axis([10 50 -0.000075 0.000075]);
+axis([10 50 -0.000055 0.000055]);
 xlabel('Time [s]','fontsize',12);
 ylabel('Trajectory [m]','fontsize',12,'Interpreter','latex');
 
 %% Plot powerspectrum
 clc
-clear all
-
-% load data file
-trajData05 = importdata('trajectory05.data');
 
 fftData05 = abs(fft(trajData05(1:1001)));
 fftData05 = fftshift(fftData05);
 
-for i = 101:1000:length(trajData05)-1000
+for i = 1001:1000:length(trajData05)-1000
     temp = abs(fft(trajData05(i:i+1000)));
     fftData05 = fftData05 + fftshift(temp);
 end
@@ -78,13 +74,11 @@ end
 fftData05 = fftData05./100;
 freq05 = linspace(-pi/(0.05),pi/(0.05),length(fftData05));
 
-% load data file
-trajData5 = importdata('trajectory5.data');
 
 fftData5 = abs(fft(trajData5(1:1001)));
 fftData5 = fftshift(fftData5);
 
-for i = 101:1000:length(trajData5)-1000
+for i = 1001:1000:length(trajData5)-1000
     temp = abs(fft(trajData5(i:i+1000)));
     fftData5 = fftData5 + fftshift(temp);
 end
@@ -110,12 +104,11 @@ set(l,'Interpreter','latex')
 print(gcf,'-depsc2','powerspectrum.eps')
 
 
-
 %% Corr func
 clc
 
-corrData05 = ifftshift(real(ifft(power05)));
-corrData5 = ifftshift(real(ifft(power5)));
+corrData05 = real(fftshift(ifft(power05)));
+corrData5 = real(fftshift(ifft(power5)));
 
 x05 = linspace(0,length(trajData05)*0.05,length(corrData05)/2);
 x5 = linspace(0,length(trajData5)*0.05,length(corrData5)/2);
@@ -124,7 +117,7 @@ figure(5);
 clf
 plot(x05, corrData05(ceil(length(corrData05)/2):end-1),'g-',x5,corrData5(ceil(length(corrData5)/2):end-1),'b-');
 hold on
-%axis([0 25 0.0015 0.005]);
+%axis([0 5000 -0.0000000004 0.0000000004]);
 xlabel('Time lag [s]','fontsize',12);
 ylabel('Amplitude','fontsize',12);
 title('Correlation function','fontsize',12);
@@ -132,4 +125,18 @@ title('Correlation function','fontsize',12);
 l = legend('Time correlation function for $\eta = 0.05 \omega$','Time correlation function for $\eta = 5 \omega$');
 set(l,'Interpreter','latex')
 print(gcf,'-depsc2','corrFunc.eps')
+%%
+clf
+data = trajData05;
+datasq = data.^2;
 
+
+norm = mean(datasq) - mean(data)^2;
+cov =  xcov(data, 500000);
+cov =  cov/max(cov);
+index = find(cov(500001:end) < exp(-2),1);
+phi_s = cov(500+index);
+
+sigma = sqrt(norm/(900000)*index)
+plot(cov);
+axis([500000 510000 -0.2 0.2]);
