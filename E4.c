@@ -30,7 +30,7 @@ int main()
 
 	// Initiation of variables
 	omega = 3.0;
-	ny = 5.0 * omega;
+	ny = 0.05 * omega;
 	c0 = exp(-ny * dt);
 	m = 1.0; // Units: [g/mol]
 	temp = 300.0; // Units: [K]
@@ -54,11 +54,11 @@ int main()
 
 	// File to print the trajectory
 	FILE *tr;
-	tr = fopen("trajectory5.data","w");	
+	tr = fopen("trajectory05.data","w");	
 
 	// File to print the trajectory
 	FILE *corr;
-	corr = fopen("corrfunc5.data","w");	
+	corr = fopen("corrfunc05.data","w");	
 
 	// Print the trajectory
 	fprintf(tr, "%f \n", x);

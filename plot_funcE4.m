@@ -46,6 +46,7 @@ figure(2);
 clf
 plot(linspace(0,length(trajData05)*0.05,length(trajData05)),trajData05,'g', linspace(0,length(trajData5)*0.05,length(trajData5)),trajData5,'b');
 hold on
+axis([0 100 -0.2 0.2]);
 xlabel('Time [ps]','fontsize',12);
 ylabel('Trajectory [\AA]','fontsize',12,'Interpreter','latex');
 
