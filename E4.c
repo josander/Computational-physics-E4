@@ -32,21 +32,18 @@ int main()
 	omega = 3.0;
 	ny = 5.0 * omega;
 	c0 = exp(-ny * dt);
-	m = 1; // Units: [g/mol]
+	m = 1.0; // Units: [g/mol]
 	temp = 300.0; // Units: [K]
 	dt = 0.05; // Units: [ps]
 	timesteps = 100000;
 	x = 0.05; // Units: [Å]
-	v = 0;
-	a = 0;
+	v = 0.0;
+	a = 0.0;
 	double X[timesteps + 1];
 	X[0] = x;
 
-	/* fft vectors */
-	double *fft_data = malloc((timesteps+1) * sizeof (double));
-	double *freq = malloc((timesteps+1) * sizeof (double));
+	// Allocate memory for vectors
 	double *corr_func = malloc((timesteps-500+1) * sizeof(double));
-	
 
 	// Seed for generating random numbers
 	srand(time(NULL));
@@ -84,7 +81,7 @@ int main()
 		fprintf(dist, "%f \t %f \t %f \t %f \n", r1, r2, g1, g2);
 	
 		// v(t+)
-		v = sqrt(c0)*v + sqrt(kB * temp / m) * sqrt(1-c0)*g1;
+		v = sqrt(c0)*v + sqrt(kB * temp / m) * sqrt(1.0-c0)*g1;
 	
 		// v(t + dt/2)
 		v = v + a * dt / 2.0;
@@ -108,19 +105,6 @@ int main()
 
 	}
 
-	/* make FFT (powerspectrum) */
-	fft(X, fft_data, timesteps+1);
-	fft_shift(fft_data, timesteps+1); 
-	fft_freq_shift(freq, dt, timesteps+1);
-
-	/* Print powerspectrum to file */
-	FILE *fft_file;
-        fft_file = fopen("fft.data","w");
-	for (i = 0; i < timesteps; i++){
-		fprintf (fft_file,"%e \t %e \n", freq[i], fft_data[i]);
-	}
-	fclose(fft_file);
-
 	// Calculate the correlation function
 	for(i = 0; i < timesteps-500; i++){
 		for(k = 0; k < 500; k++){
@@ -138,9 +122,6 @@ int main()
 	fclose(dist);
 	fclose(tr);
 	fclose(corr);
-
-	free(fft_data); free(freq); free(corr_func);
-	fft_data = NULL; freq = NULL; corr_func = NULL;
 
 }
 
