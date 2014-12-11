@@ -7,7 +7,7 @@
 #include <stdlib.h>
 #include "E4_func.h"
 #define PI 3.141592653589
-#define kB 0.000086173324 // Metal units
+#define kB (1.3806488 * pow(10,-23)) // Units: [m2 kg /(s2 K)]
 
 /* Main program */
 int main()
@@ -29,7 +29,7 @@ int main()
 
 	// Initiation of variables
 	omega = 3.0;
-	eta = 0.05 * omega;
+	eta = 5.0 * omega;
 	c0 = exp(-eta * dt);
 	m = 1.0; // Units: [g/mol]
 	temp = 300.0; // Units: [K]
@@ -53,11 +53,11 @@ int main()
 
 	// File to print the trajectory
 	FILE *tr;
-	tr = fopen("trajectory05.data","w");	
+	tr = fopen("trajectory5.data","w");	
 
 	// File to print the trajectory
 	FILE *corr;
-	corr = fopen("corrfunc05.data","w");	
+	corr = fopen("corrfunc5.data","w");	
 
 	// Print the trajectory
 	fprintf(tr, "%f \n", x);
