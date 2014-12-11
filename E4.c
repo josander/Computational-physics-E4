@@ -15,7 +15,7 @@ int main()
 
 	// Declaration of variables
 	int i, j, k;
-	double ny;
+	double eta;
 	double omega;
 	double c0;
 	double m;
@@ -29,8 +29,8 @@ int main()
 
 	// Initiation of variables
 	omega = 3.0;
-	ny = 0.05 * omega;
-	c0 = exp(-ny * dt);
+	eta = 0.05 * omega;
+	c0 = exp(-eta * dt);
 	m = 1.0; // Units: [g/mol]
 	temp = 300.0; // Units: [K]
 	dt = 0.05; // Units: [ps]
@@ -63,7 +63,7 @@ int main()
 	fprintf(tr, "%f \n", x);
 
 	// Calc initial acceleration
-	a = acceleration(v, x, ny, omega);
+	a = acceleration(v, x, eta, omega);
 
 	// Time evolution
 	for(i = 1; i < timesteps + 1; i++){
@@ -89,7 +89,7 @@ int main()
 		x = x + v * dt;
 
 		// Calc new acceleration
-		a = acceleration(v, x, ny, omega);
+		a = acceleration(v, x, eta, omega);
 
 		// v(t- + dt)
 		v = v + a * dt / 2.0;
