@@ -6,7 +6,6 @@
 #include <math.h>
 #include <stdlib.h>
 #include "E4_func.h"
-#include "fft_func.h"
 #define PI 3.141592653589
 #define kB 0.000086173324 // Metal units
 
