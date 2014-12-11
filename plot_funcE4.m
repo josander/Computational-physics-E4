@@ -40,19 +40,25 @@ clear all
 % load data file
 trajData05 = importdata('trajectory05.data');
 trajData5 = importdata('trajectory5.data');
-
+%%
 % plot data
 figure(2);
 clf
+subplot(2,1,1)
 plot(linspace(0,length(trajData05)*0.05,length(trajData05)),trajData05,'g', linspace(0,length(trajData5)*0.05,length(trajData5)),trajData5,'b');
-hold on
-axis([0 100 -0.1 0.1]);
+axis([0 50 -0.075 0.075]);
 xlabel('Time [s]','fontsize',12);
 ylabel('Trajectory [m]','fontsize',12,'Interpreter','latex');
 
 l = legend('Trajectory for $\eta = 0.05 \omega$','Trajectory for $\eta = 5 \omega$');
 set(l,'Interpreter','latex')
 print(gcf,'-depsc2','trajectory.eps')
+
+subplot(2,1,2)
+plot(linspace(0,length(trajData5)*0.05,length(trajData5)),trajData5,'b');
+axis([10 50 -0.000075 0.000075]);
+xlabel('Time [s]','fontsize',12);
+ylabel('Trajectory [m]','fontsize',12,'Interpreter','latex');
 
 %% Plot powerspectrum
 clc
@@ -86,13 +92,16 @@ end
 fftData5 = fftData5./100;
 freq5 = linspace(-pi/(0.05),pi/(0.05),length(fftData5));
 
+power05 = fftData05.^2./(length(trajData05)*0.05);
+power5 = fftData5.^2./(length(trajData5)*0.05);
+
 figure(3);
 clf
-plot(freq05, fftData05,'g',freq5, fftData5,'b');
+plot(freq05, power05,'g',freq5, power5,'b');
 xlim([-5 5]);
 
 % labels
-xlabel('Frequency [THz]','fontsize',12);
+xlabel('Frequency [Hz]','fontsize',12);
 ylabel('Amplitude','fontsize',12);
 title('Powerspectrum of the trajectory','fontsize',12);
 
@@ -105,15 +114,18 @@ print(gcf,'-depsc2','powerspectrum.eps')
 %% Corr func
 clc
 
-corrData5 = importdata('corrfunc5.data');
-corrData05 = importdata('corrfunc05.data');
+corrData05 = ifftshift(real(ifft(power05)));
+corrData5 = ifftshift(real(ifft(power5)));
+
+x05 = linspace(0,length(trajData05)*0.05,length(corrData05)/2);
+x5 = linspace(0,length(trajData5)*0.05,length(corrData5)/2);
 
 figure(5);
 clf
-plot(linspace(0,0.05*length(corrData05),length(corrData05)),corrData05,'g-',linspace(0,0.05*length(corrData5),length(corrData5)),corrData5,'b-');
+plot(x05, corrData05(ceil(length(corrData05)/2):end-1),'g-',x5,corrData5(ceil(length(corrData5)/2):end-1),'b-');
 hold on
 %axis([0 25 0.0015 0.005]);
-xlabel('Time lag [ps]','fontsize',12);
+xlabel('Time lag [s]','fontsize',12);
 ylabel('Amplitude','fontsize',12);
 title('Correlation function','fontsize',12);
 
