@@ -30,12 +30,12 @@ int main()
 	// Initiation of variables
 	omega = 3.0;
 	eta = 5.0 * omega;
-	c0 = exp(-eta * dt);
-	m = 1.0; // Units: [g/mol]
+	m = 1.0; // Units: [kg]
 	temp = 300.0; // Units: [K]
-	dt = 0.05; // Units: [ps]
+	dt = 0.05; // Units: [s]
+	c0 = exp(-eta * dt);
 	timesteps = 100000;
-	x = 0.05; // Units: [Å]
+	x = 0.05; // Units: [m]
 	v = 0.0;
 	a = 0.0;
 	double X[timesteps + 1];
