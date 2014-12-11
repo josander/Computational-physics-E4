@@ -47,8 +47,8 @@ clf
 plot(linspace(0,length(trajData05)*0.05,length(trajData05)),trajData05,'g', linspace(0,length(trajData5)*0.05,length(trajData5)),trajData5,'b');
 hold on
 axis([0 100 -0.1 0.1]);
-xlabel('Time [ps]','fontsize',12);
-ylabel('Trajectory [\AA]','fontsize',12,'Interpreter','latex');
+xlabel('Time [s]','fontsize',12);
+ylabel('Trajectory [m]','fontsize',12,'Interpreter','latex');
 
 l = legend('Trajectory for $\eta = 0.05 \omega$','Trajectory for $\eta = 5 \omega$');
 set(l,'Interpreter','latex')
@@ -99,21 +99,6 @@ title('Powerspectrum of the trajectory','fontsize',12);
 l = legend('Powerspectrum for $\eta = 0.05 \omega$','Powerspectrum for $\eta = 5 \omega$');
 set(l,'Interpreter','latex')
 print(gcf,'-depsc2','powerspectrum.eps')
-
-%% Plot powerspectrum, fft-data from c-program
-% load the data file
-fftdata = importdata('fft.data');
-
-%plot
-figure(4);
-plot(2*pi*fftdata(:,1),fftdata(:,2),'g-');
-hold on
-xlim([-5 5]);
-
-% labels
-xlabel('Frequency [THz]','fontsize',12);
-ylabel('Amplitude','fontsize',12);
-title('Powerspectrum of the trajectory','fontsize',12);
 
 
 

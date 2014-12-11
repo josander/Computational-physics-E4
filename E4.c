@@ -29,7 +29,7 @@ int main()
 
 	// Initiation of variables
 	omega = 3.0;
-	eta = 5.0 * omega;
+	eta = 0.05 * omega;
 	m = 1.0; // Units: [kg]
 	temp = 300.0; // Units: [K]
 	dt = 0.05; // Units: [s]
@@ -53,11 +53,11 @@ int main()
 
 	// File to print the trajectory
 	FILE *tr;
-	tr = fopen("trajectory5.data","w");	
+	tr = fopen("trajectory05.data","w");	
 
 	// File to print the trajectory
 	FILE *corr;
-	corr = fopen("corrfunc5.data","w");	
+	corr = fopen("corrfunc05.data","w");	
 
 	// Print the trajectory
 	fprintf(tr, "%f \n", x);
