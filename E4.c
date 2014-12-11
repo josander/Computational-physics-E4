@@ -63,7 +63,7 @@ int main()
 	fprintf(tr, "%f \n", x);
 
 	// Calc initial acceleration
-	a = acceleration(v, x, eta, omega);
+	a = acceleration(x, omega);
 
 	// Time evolution
 	for(i = 1; i < timesteps + 1; i++){
@@ -89,7 +89,7 @@ int main()
 		x = x + v * dt;
 
 		// Calc new acceleration
-		a = acceleration(v, x, eta, omega);
+		a = acceleration(x, omega);
 
 		// v(t- + dt)
 		v = v + a * dt / 2.0;
