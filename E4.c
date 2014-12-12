@@ -29,17 +29,19 @@ int main()
 
 	// Initiation of variables
 	omega = 3.0;
-	eta = 5.0 * omega;
-	c0 = exp(-eta * dt);
+	eta = 5 * omega;
+
 	m = 1.0; // Units: [g/mol]
 	temp = 300.0; // Units: [K]
 	dt = 0.05; // Units: [ps]
+	c0 = exp(dt*eta*-1);
 	timesteps = 100000;
 	x = 0.05; // Units: [Å]
 	v = 0.0;
 	a = 0.0;
 	double X[timesteps + 1];
 	X[0] = x;
+
 
 	// Allocate memory for vectors
 	double *corr_func = malloc((timesteps-500+1) * sizeof(double));
@@ -83,7 +85,7 @@ int main()
 		v = sqrt(c0)*v + sqrt(kB * temp / m) * sqrt(1.0-c0)*g1;
 	
 		// v(t + dt/2)
-		v = v + a * dt / 2.0;
+		v = v + a * dt *0.5;
 	
 		// x(t + dt)
 		x = x + v * dt;
@@ -92,7 +94,7 @@ int main()
 		a = acceleration(x, omega);
 
 		// v(t- + dt)
-		v = v + a * dt / 2.0;
+		v = v + a * dt * 0.5;
 
 		// v(t + dt)
 		v = sqrt(c0) * v + sqrt(kB * temp / m) * sqrt(1-c0)*g2;
