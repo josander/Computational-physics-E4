@@ -104,7 +104,7 @@ set(l,'Interpreter','latex')
 print(gcf,'-depsc2','powerspectrum.eps')
 
 
-%% Corr func
+%% x-mas func
 clc
 
 corrData05 = real(fftshift(ifft(power05)));
@@ -115,16 +115,45 @@ x5 = linspace(0,length(trajData5)*0.05,length(corrData5)/2);
 
 figure(5);
 clf
-plot(x05, corrData05(ceil(length(corrData05)/2):end-1),'g-',x5,corrData5(ceil(length(corrData5)/2):end-1),'b-');
+plot( corrData05(ceil(length(corrData05)/2):end-1), x05,'Color',[0.0 1.0 0.0]);
 hold on
+plot(corrData5(ceil(length(corrData5)/2):end-1), x5,'Color',[0.8 0.5 0.3]);
 %axis([0 5000 -0.0000000004 0.0000000004]);
-xlabel('Time lag [s]','fontsize',12);
-ylabel('Amplitude','fontsize',12);
+ylabel('Time lag [s]','fontsize',12);
+xlabel('Amplitude','fontsize',12);
+title('X-mas function','fontsize',12);
+
+l = legend('Time correlation function for $\eta = 0.05 \omega$','Time correlation function for $\eta = 5 \omega$');
+set(l,'Interpreter','latex')
+%set(gcf,'renderer','painters','PaperPosition',[0 0 8.3 11.7]);
+print(gcf,'-depsc2','xFunc.eps')
+
+%%
+
+clf
+
+fftData05 = abs(fft(trajData05));
+power05 = fftData05.^2;
+
+data = ifft(power05);
+plot(data,'g');
+hold on
+
+fftData5 = abs(fft(trajData5));
+power5 = fftData5.^2;
+
+data = ifft(power5);
+plot(data,'b');
+axis([0 10000 -0.0005 0.0005]);
+
+ylabel('Time lag [s]','fontsize',12);
+xlabel('Amplitude','fontsize',12);
 title('Correlation function','fontsize',12);
 
 l = legend('Time correlation function for $\eta = 0.05 \omega$','Time correlation function for $\eta = 5 \omega$');
 set(l,'Interpreter','latex')
-print(gcf,'-depsc2','corrFunc.eps')
+print(gcf,'-depsc2','xFunc.eps')
+
 %%
 clf
 data = trajData05;
