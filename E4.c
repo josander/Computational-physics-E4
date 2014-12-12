@@ -29,22 +29,33 @@ int main()
 
 	// Initiation of variables
 	omega = 3.0;
+<<<<<<< HEAD
 	eta = 5 * omega;
 
 	m = 1.0; // Units: [g/mol]
 	temp = 300.0; // Units: [K]
 	dt = 0.05; // Units: [ps]
 	c0 = exp(dt*eta*-1);
+=======
+	eta = 0.05 * omega;
+	m = 0.00000000001; // Units: [kg]
+	temp = 300.0; // Units: [K]
+	dt = 0.05; // Units: [s]
+	c0 = exp(-eta * dt);
+>>>>>>> e83737702371f1f564679620d8232875d2a31c12
 	timesteps = 100000;
-	x = 0.05; // Units: [Å]
+	x = 0.01; // Units: [m]
 	v = 0.0;
 	a = 0.0;
 	double X[timesteps + 1];
 	X[0] = x;
 
+<<<<<<< HEAD
 
 	// Allocate memory for vectors
 	double *corr_func = malloc((timesteps-500+1) * sizeof(double));
+=======
+>>>>>>> e83737702371f1f564679620d8232875d2a31c12
 
 	// Seed for generating random numbers
 	srand(time(NULL));
@@ -55,11 +66,7 @@ int main()
 
 	// File to print the trajectory
 	FILE *tr;
-	tr = fopen("trajectory5.data","w");	
-
-	// File to print the trajectory
-	FILE *corr;
-	corr = fopen("corrfunc5.data","w");	
+	tr = fopen("trajectory05.data","w");	
 
 	// Print the trajectory
 	fprintf(tr, "%f \n", x);
@@ -106,23 +113,10 @@ int main()
 
 	}
 
-	// Calculate the correlation function
-	for(i = 0; i < timesteps-500; i++){
-		for(k = 0; k < 500; k++){
-			corr_func[k] += (X[i]*X[i+k]);
-		}
-	}
-
-	// Print correlation function to data-file
-	for(k = 0; k < 500; k++){
-		fprintf(corr,"%f\n", corr_func[k]/(timesteps-500));
-	}
-
 
 	// Close files
 	fclose(dist);
 	fclose(tr);
-	fclose(corr);
 
 }
 

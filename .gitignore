@@ -28,7 +28,7 @@
 *.i*86
 *.x86_64
 *.hex
-MD
+E4
 
 # Data files
 *.data

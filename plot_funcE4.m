@@ -40,31 +40,33 @@ clear all
 % load data file
 trajData05 = importdata('trajectory05.data');
 trajData5 = importdata('trajectory5.data');
-
+%%
 % plot data
 figure(2);
 clf
+subplot(2,1,1)
 plot(linspace(0,length(trajData05)*0.05,length(trajData05)),trajData05,'g', linspace(0,length(trajData5)*0.05,length(trajData5)),trajData5,'b');
-hold on
-axis([0 100 -0.1 0.1]);
-xlabel('Time [ps]','fontsize',12);
-ylabel('Trajectory [\AA]','fontsize',12,'Interpreter','latex');
+axis([0 50 -0.01 0.01]);
+xlabel('Time [s]','fontsize',12);
+ylabel('Trajectory [m]','fontsize',12,'Interpreter','latex');
 
 l = legend('Trajectory for $\eta = 0.05 \omega$','Trajectory for $\eta = 5 \omega$');
 set(l,'Interpreter','latex')
 print(gcf,'-depsc2','trajectory.eps')
 
+subplot(2,1,2)
+plot(linspace(0,length(trajData5)*0.05,length(trajData5)),trajData5,'b');
+axis([10 50 -0.000055 0.000055]);
+xlabel('Time [s]','fontsize',12);
+ylabel('Trajectory [m]','fontsize',12,'Interpreter','latex');
+
 %% Plot powerspectrum
 clc
-clear all
-
-% load data file
-trajData05 = importdata('trajectory05.data');
 
 fftData05 = abs(fft(trajData05(1:1001)));
 fftData05 = fftshift(fftData05);
 
-for i = 101:1000:length(trajData05)-1000
+for i = 1001:1000:length(trajData05)-1000
     temp = abs(fft(trajData05(i:i+1000)));
     fftData05 = fftData05 + fftshift(temp);
 end
@@ -72,13 +74,11 @@ end
 fftData05 = fftData05./100;
 freq05 = linspace(-pi/(0.05),pi/(0.05),length(fftData05));
 
-% load data file
-trajData5 = importdata('trajectory5.data');
 
 fftData5 = abs(fft(trajData5(1:1001)));
 fftData5 = fftshift(fftData5);
 
-for i = 101:1000:length(trajData5)-1000
+for i = 1001:1000:length(trajData5)-1000
     temp = abs(fft(trajData5(i:i+1000)));
     fftData5 = fftData5 + fftshift(temp);
 end
@@ -86,13 +86,16 @@ end
 fftData5 = fftData5./100;
 freq5 = linspace(-pi/(0.05),pi/(0.05),length(fftData5));
 
+power05 = fftData05.^2./(length(trajData05)*0.05);
+power5 = fftData5.^2./(length(trajData5)*0.05);
+
 figure(3);
 clf
-plot(freq05, fftData05,'g',freq5, fftData5,'b');
+plot(freq05, power05,'g',freq5, power5,'b');
 xlim([-5 5]);
 
 % labels
-xlabel('Frequency [THz]','fontsize',12);
+xlabel('Frequency [Hz]','fontsize',12);
 ylabel('Amplitude','fontsize',12);
 title('Powerspectrum of the trajectory','fontsize',12);
 
@@ -100,39 +103,40 @@ l = legend('Powerspectrum for $\eta = 0.05 \omega$','Powerspectrum for $\eta = 5
 set(l,'Interpreter','latex')
 print(gcf,'-depsc2','powerspectrum.eps')
 
-%% Plot powerspectrum, fft-data from c-program
-% load the data file
-fftdata = importdata('fft.data');
-
-%plot
-figure(4);
-plot(2*pi*fftdata(:,1),fftdata(:,2),'g-');
-hold on
-xlim([-5 5]);
-
-% labels
-xlabel('Frequency [THz]','fontsize',12);
-ylabel('Amplitude','fontsize',12);
-title('Powerspectrum of the trajectory','fontsize',12);
-
-
 
 %% Corr func
 clc
 
-corrData5 = importdata('corrfunc5.data');
-corrData05 = importdata('corrfunc05.data');
+corrData05 = real(fftshift(ifft(power05)));
+corrData5 = real(fftshift(ifft(power5)));
+
+x05 = linspace(0,length(trajData05)*0.05,length(corrData05)/2);
+x5 = linspace(0,length(trajData5)*0.05,length(corrData5)/2);
 
 figure(5);
 clf
-plot(linspace(0,0.05*length(corrData05),length(corrData05)),corrData05,'g-',linspace(0,0.05*length(corrData5),length(corrData5)),corrData5,'b-');
+plot(x05, corrData05(ceil(length(corrData05)/2):end-1),'g-',x5,corrData5(ceil(length(corrData5)/2):end-1),'b-');
 hold on
-%axis([0 25 0.0015 0.005]);
-xlabel('Time lag [ps]','fontsize',12);
+%axis([0 5000 -0.0000000004 0.0000000004]);
+xlabel('Time lag [s]','fontsize',12);
 ylabel('Amplitude','fontsize',12);
 title('Correlation function','fontsize',12);
 
 l = legend('Time correlation function for $\eta = 0.05 \omega$','Time correlation function for $\eta = 5 \omega$');
 set(l,'Interpreter','latex')
 print(gcf,'-depsc2','corrFunc.eps')
+%%
+clf
+data = trajData05;
+datasq = data.^2;
 
+
+norm = mean(datasq) - mean(data)^2;
+cov =  xcov(data, 500000);
+cov =  cov/max(cov);
+index = find(cov(500001:end) < exp(-2),1);
+phi_s = cov(500+index);
+
+sigma = sqrt(norm/(900000)*index)
+plot(cov);
+axis([500000 510000 -0.2 0.2]);
