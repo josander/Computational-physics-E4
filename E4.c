@@ -29,17 +29,20 @@ int main()
 
 	// Initiation of variables
 	omega = 3.0;
-	eta = 0.05 * omega;
+
+	eta = 5 * omega;
 	m = 0.00000000001; // Units: [kg]
 	temp = 300.0; // Units: [K]
 	dt = 0.05; // Units: [s]
 	c0 = exp(-eta * dt);
+
 	timesteps = 100000;
 	x = 0.01; // Units: [m]
 	v = 0.0;
 	a = 0.0;
 	double X[timesteps + 1];
 	X[0] = x;
+
 
 
 	// Seed for generating random numbers
@@ -51,7 +54,7 @@ int main()
 
 	// File to print the trajectory
 	FILE *tr;
-	tr = fopen("trajectory05.data","w");	
+	tr = fopen("trajectory5.data","w");	
 
 	// Print the trajectory
 	fprintf(tr, "%f \n", x);
@@ -77,7 +80,7 @@ int main()
 		v = sqrt(c0)*v + sqrt(kB * temp / m) * sqrt(1.0-c0)*g1;
 	
 		// v(t + dt/2)
-		v = v + a * dt / 2.0;
+		v = v + a * dt *0.5;
 	
 		// x(t + dt)
 		x = x + v * dt;
@@ -86,7 +89,7 @@ int main()
 		a = acceleration(x, omega);
 
 		// v(t- + dt)
-		v = v + a * dt / 2.0;
+		v = v + a * dt * 0.5;
 
 		// v(t + dt)
 		v = sqrt(c0) * v + sqrt(kB * temp / m) * sqrt(1-c0)*g2;
